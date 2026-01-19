@@ -57,10 +57,17 @@ ggplot(
 
 ### Exercise 3
 
-Remove this text, and add your answer for Exercise 3 here.
+The violin plots reveal the full shape of the distribution of plastic waste per capita within each continent, including skewness, variation in density, and long tails, which are not visible in box plots. While extreme values can influence the shape of a violin plot - sometimes creating distinct density features (ex. the long "tail" of North America) - box plots explicitly display summary statistics such as the median, interquartile range, and formally identified outliers, which are not directly marked in violin plots.
 
 ```{r plastic-waste-violin}
-# insert code here
+ggplot(
+  data = plastic_waste,
+  mapping = aes(
+    x = continent,
+    y = plastic_waste_per_cap
+  )
+) +
+  geom_violin()
 ```
 
 ### Exercise 4
