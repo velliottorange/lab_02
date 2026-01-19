@@ -57,7 +57,7 @@ ggplot(
 
 ### Exercise 3
 
-The violin plots reveal the full shape of the distribution of plastic waste per capita within each continent, including skewness, variation in density, and long tails, which are not visible in box plots. While extreme values can influence the shape of a violin plot - sometimes creating distinct density features (ex. the long "tail" of North America) - box plots explicitly display summary statistics such as the median, interquartile range, and formally identified outliers, which are not directly marked in violin plots.
+The violin plots reveal the full shape of the distribution of plastic waste per capita within each continent, including skewness, variation in density, and long tails, which are not visible in box plots. In contrast, box plots show summary statistics such as the median, interquartile range, and identified outliers, which are not explicitly displayed in violin plots.
 
 ```{r plastic-waste-violin}
 ggplot(
@@ -72,31 +72,88 @@ ggplot(
 
 ### Exercise 4
 
-Remove this text, and add your answer for Exercise 4 here.
+The scatterplot shows a generally positive relationship between plastic waste per capita and mismanaged plastic waste per capita: most countries cluster at low values for both variables, while a few outliers, such as Trinidad and Tobago, have extremely high plastic waste per capita, indicating higher potential for mismanaged waste (as discussed by Kanhai et al., 2024)
 
 ```{r plastic-waste-mismanaged}
-# insert code here
+ggplot(plastic_waste, aes(x = plastic_waste_per_cap, y = mismanaged_plastic_waste_per_cap)) +
+  geom_point() +
+  labs(
+    x = "Plastic Waste per Capita",
+    y = "Mismanaged Plastic Waste per Capita",
+    title = "Relationship between Plastic Waste and Mismanaged Plastic Waste"
+  ) +
+  theme_minimal()
 ```
+
+When we color the points by continent, we can see that most continents cluster at relatively low values of both plastic waste per capita and mismanaged plastic waste per capita, while North America stands out, largely because of the extreme outlier, Trinidad and Tobago. Other continents like Africa, Asia, and South America show some overlap, with moderate variation, but no continent besides North America reaches the VERY high plastic waste per capita values. This suggests that while the general association between plastic waste and mismanaged waste is positive for all continents, North America includes extreme cases that skew the overall pattern.
 
 ```{r plastic-waste-mismanaged-continent}
-# insert code here
+ggplot(plastic_waste, aes(x = plastic_waste_per_cap, y = mismanaged_plastic_waste_per_cap, color = continent)) +
+  geom_point() +
+  labs(
+    x = "Plastic Waste per Capita",
+    y = "Mismanaged Plastic Waste per Capita",
+    title = "Plastic Waste vs Mismanaged Plastic Waste by Continent"
+  ) +
+  theme_minimal()
 ```
 
+Neither total population nor coastal population appears to be strongly linearly associated with plastic waste per capita. While both plots show wide variation and a few extreme outliers, there is no clear trend indicating that larger populations (total or coastal) consistently produce more plastic per person.
+
 ```{r plastic-waste-population-total}
-# insert code here
+ggplot(plastic_waste, aes(x = total_pop, y = plastic_waste_per_cap)) +
+  geom_point() +
+  labs(
+    x = "Total Population",
+    y = "Plastic Waste per Capita",
+    title = "Plastic Waste per Capita vs Total Population"
+  ) +
+  theme_minimal()
 ```
 
 ```{r plastic-waste-population-coastal}
-# insert code here
+ggplot(plastic_waste, aes(x = coastal_pop, y = plastic_waste_per_cap)) +
+  geom_point() +
+  labs(
+    x = "Coastal Population",
+    y = "Plastic Waste per Capita",
+    title = "Plastic Waste per Capita vs Coastal Population"
+  ) +
+  theme_minimal()
 ```
 
 ### Exercise 5
 
-Remove this text, and add your answer for Exercise 5 here.
+Plastic waste per capita tends to increase slightly with higher coastal population proportion, but the strength of this relationship varies by continent. Africa and South America show moderate positive associations, while North America shows almost no relationship despite high coastal population proportions. Overall, the trend is driven by continents with more moderate coastal populations, and the black line (the smoothed conditional mean, I think?) reflects this by rising in the middle range and flattening at the high end.
 
 ```{r recreate-viz}
-# insert code here
+# Create a factor for continent to control the legend order
+plastic_waste$continent_factor <- factor(
+  plastic_waste$continent,
+  levels = c("Africa", "Asia", "Europe", "North America", "Oceania", "South America")
+)
+
+# Define colors for each continent
+continent_colors <- c(
+  "Africa" = "#3B0A45",        # dark purple/blue
+  "Asia" = "#5E2A7E",          # medium purple/blue
+  "Europe" = "#8C5FA5",        # light purple/blue with a little green
+  "North America" = "#4CAF50", # medium green
+  "Oceania" = "#9ACD32",       # medium green/yellow
+  "South America" = "#FFD700"  # yellow
+)
+
+# Plot
+ggplot(plastic_waste %>% filter(plastic_waste_per_cap <= 3), 
+       aes(x = coastal_pop / total_pop, y = plastic_waste_per_cap)) +
+  geom_point(aes(color = continent_factor), size = 1.4) +
+  geom_smooth(method = "loess", color = "black", fill = "grey70", linewidth = 1.2) +
+  scale_color_manual(values = continent_colors) +
+  labs(
+    title = "Plastic Waste vs. Coastal Population Proportion by Continent",
+    x = "Coastal Population Proportion (Coastal / Total)",
+    y = "Plastic Waste per Capita",
+    color = "Continent"
+  ) +
+  theme_minimal()
 ```
-
-
-
