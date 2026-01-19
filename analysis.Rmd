@@ -1,7 +1,7 @@
 ---
 title: "Lab 02 - Plastic waste"
-author: "Insert your name here"
-date: "Insert date here"
+author: "Verity Elliott"
+date: "01_19_2026"
 output: github_document
 ---
 
@@ -19,10 +19,24 @@ plastic_waste <- read.csv("data/plastic-waste.csv")
 
 ### Exercise 1
 
-Remove this text, and add your answer for Exercise 1 here.
+The distribution of plastic waste per capita varies considerably across continents. Africa has the lowest values, with most countries producing very little plastic waste per person, while North America has the highest median and mean, and also exhibits extreme outliers such as Trinidad and Tobago *. Europe, South America, Asia, and Oceania fall in between, generally showing low to moderate plastic waste per capita with some variability. 
+
+* Trinidad and Tobago is an outlier in North America because, as a Small Island Developing State, it faces high plastic consumption, limited recycling infrastructure, and environmental vulnerability, resulting in plastic pollution that harms marine life, tourism, and local ecosystems (Kanhai et al., 2024).
+
+Histograms show tight peaks for Africa and Asia, moderate peaks for Europe, South America, and Oceania, and a highly skewed distribution for North America due to a few very high values.
 
 ```{r plastic-waste-continent}
-# insert code here
+plastic_waste %>%
+  filter(!is.na(plastic_waste_per_cap)) %>%
+  group_by(continent) %>%
+  summarise(
+    n = n(),
+    mean = mean(plastic_waste_per_cap),
+    median = median(plastic_waste_per_cap),
+    sd = sd(plastic_waste_per_cap),
+    min = min(plastic_waste_per_cap),
+    max = max(plastic_waste_per_cap)
+  )
 ```
 
 ### Exercise 2
@@ -66,5 +80,6 @@ Remove this text, and add your answer for Exercise 5 here.
 ```{r recreate-viz}
 # insert code here
 ```
+
 
 
