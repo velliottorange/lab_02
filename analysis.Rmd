@@ -41,8 +41,18 @@ plastic_waste %>%
 
 ### Exercise 2
 
+We mapped color and fill to the continent variable inside aes() because these aesthetics vary by group and allow ggplot to assign different colors to each continent automatically. In contrast, the alpha level was set outside aes() as a fixed property of the geometry because we wanted the same level of transparency for all density curves to improve visibility when they overlap.
+
 ```{r plastic-waste-density}
-# insert code here
+ggplot(
+  data = plastic_waste,
+  mapping = aes(
+    x = plastic_waste_per_cap,
+    color = continent,
+    fill = continent
+  )
+) +
+  geom_density(alpha = 0.3)
 ```
 
 ### Exercise 3
